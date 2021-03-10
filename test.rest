@@ -2,11 +2,11 @@ GET http://localhost:3001/api/persons
 
 ###
 
-DELETE http://localhost:3001/api/persons/6
+DELETE https://intense-spire-96888.herokuapp.com/api/persons/6
 
 ###
 
-POST http://localhost:3001/api/persons/ HTTP/1.1
+POST https://intense-spire-96888.herokuapp.com/api/persons/ HTTP/1.1
 content-type: application/json
 
 {
