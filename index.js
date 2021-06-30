@@ -31,34 +31,34 @@ app.use(morgan((tokens,req,res)=>{
 }))
 
 
-let persons = 
- [
-      {
-        "name": "Arto Hellas",
-        "number": "040-123456",
-        "id": 1
-      },
-      {
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523",
-        "id": 2
-      },
-      {
-        "name": "Dan Abramov",
-        "number": "12-43-234345",
-        "id": 3
-      },
-      {
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122",
-        "id": 4
-      },
-      {
-        "name": "Zlatan Ibrahimovic",
-        "number": "9702786031",
-        "id": 5
-      }
-    ]
+// let persons = 
+//  [
+//       {
+//         "name": "Arto Hellas",
+//         "number": "040-123456",
+//         "id": 1
+//       },
+//       {
+//         "name": "Ada Lovelace",
+//         "number": "39-44-5323523",
+//         "id": 2
+//       },
+//       {
+//         "name": "Dan Abramov",
+//         "number": "12-43-234345",
+//         "id": 3
+//       },
+//       {
+//         "name": "Mary Poppendieck",
+//         "number": "39-23-6423122",
+//         "id": 4
+//       },
+//       {
+//         "name": "Zlatan Ibrahimovic",
+//         "number": "9702786031",
+//         "id": 5
+//       }
+//     ]
 
     
 
@@ -90,15 +90,17 @@ app.delete('/api/persons/:id', (request,response) => {
     response.status(204).end()
 })
 
-const generateId = () => {
-    const maxID = persons.length > 0 
-    ? Math.max(...persons.map(n=>n.id))
-    : 0
-    return maxID +1
-}
+// const generateId = () => {
+//     const maxID = persons.length > 0 
+//     ? Math.max(...persons.map(n=>n.id))
+//     : 0
+//     return maxID +1
+// }
 
 app.post('/api/persons/', (request, response) => {
+
     const body = request.body
+
     if (!body.name) {
         return response.status(400).json({
             error: 'name missing'
@@ -111,20 +113,30 @@ app.post('/api/persons/', (request, response) => {
         })
     } 
 
-    if (persons.map(person=> person.name).includes(body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique!'
-        })
-    }
-    const person = {
+  
+
+    //  if (Person.find({"Name":body.name}).then(result => {
+    //     result.forEach(note => {
+    //       console.log('same')
+    //     })
+    //   }))  
+    //   { 
+    //       return response.status(400).json({
+    //         error: 'name must be unique!'
+    //     })
+    // }
+
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(),
-    }
+    })
 
-    persons = persons.concat(person)
+    person.save().then(result => {
+        console.log(`added ${person.name} number ${person.number} to phonebook`)
+        response.json(result)
 
-    response.json(person)
+    })
+    
 })
 
 app.use(unknownEndpoint)
