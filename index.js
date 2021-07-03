@@ -61,23 +61,27 @@ app.use(morgan((tokens,req,res)=>{
     
 
       
-app.get('/api/persons', (request, response)=> {
+app.get('/api/persons', (request, response, next)=> {
     Person.find({}).then(person => {
         response.json(person)
+       
     })
-
+    .catch(error => next(error))
 })
 
-app.get('/info', (request, response)=> {
-    response.send(`<p>Phonebook has info for ${persons.length} people<p>
-    <p>${Date()}</p>`)
+app.get('/info', (request, response,error)=> {
+    Person.countDocuments({}).then(count => 
+    response.send(`<p>Phonebook has info of ${count} people</p>
+    <p>${Date()}</p>`))
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     const ID = request.params.id
     Person.findById(ID).then(person=> {
         response.json(person)
     })
+    .catch(error => next(error))
 
 })
 
@@ -86,16 +90,11 @@ app.delete('/api/persons/:id', (request,response, next) => {
     Person.findByIdAndRemove(ID)
     .then(result => {
         response.status(204).end()
+  
     })
     .catch(error => next(error))
 })
 
-// const generateId = () => {
-//     const maxID = persons.length > 0 
-//     ? Math.max(...persons.map(n=>n.id))
-//     : 0
-//     return maxID +1
-// }
 
 app.post('/api/persons/', (request, response) => {
 
@@ -113,8 +112,6 @@ app.post('/api/persons/', (request, response) => {
         })
     } 
 
-  
-
     //  if (Person.find({"Name":body.name}).then(result => {
     //     result.forEach(note => {
     //       console.log('same')
@@ -125,6 +122,7 @@ app.post('/api/persons/', (request, response) => {
     //         error: 'name must be unique!'
     //     })
     // }
+
 
     const person = new Person({
         name: body.name,
@@ -139,11 +137,26 @@ app.post('/api/persons/', (request, response) => {
     
 })
 
+app.put('/api/persons/:id', (request, response, next)=> {
+    const body = request.body
+
+    const person = {
+        name: body.name,
+        number: body.number,
+    }
+
+    Person.findOneAndUpdate({"name":body.name}, person, {new: true})
+    .then(updatedNote => {
+        response.json(updatedNote)
+    })
+    .catch(error=> next(error))
+})
+
 app.use(unknownEndpoint)
 
    
 const errorHandler = (error, request, response, next) => {
-    console.error(eroor.message)
+    console.error(error.message)
 
     if(error.name == 'CastError') {
         return response.status(400).sent({error: 'malformatted id'})
