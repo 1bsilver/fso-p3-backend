@@ -29,38 +29,6 @@ app.use(morgan((tokens,req,res)=>{
 }))
 
 
-// let persons = 
-//  [
-//       {
-//         "name": "Arto Hellas",
-//         "number": "040-123456",
-//         "id": 1
-//       },
-//       {
-//         "name": "Ada Lovelace",
-//         "number": "39-44-5323523",
-//         "id": 2
-//       },
-//       {
-//         "name": "Dan Abramov",
-//         "number": "12-43-234345",
-//         "id": 3
-//       },
-//       {
-//         "name": "Mary Poppendieck",
-//         "number": "39-23-6423122",
-//         "id": 4
-//       },
-//       {
-//         "name": "Zlatan Ibrahimovic",
-//         "number": "9702786031",
-//         "id": 5
-//       }
-//     ]
-
-    
-
-      
 app.get('/api/persons', (request, response, next)=> {
     Person.find({}).then(person => {
         response.json(person)
@@ -111,17 +79,6 @@ app.post('/api/persons/', (request, response) => {
             error: 'number missing'
         })
     } 
-
-    //  if (Person.find({"Name":body.name}).then(result => {
-    //     result.forEach(note => {
-    //       console.log('same')
-    //     })
-    //   }))  
-    //   { 
-    //       return response.status(400).json({
-    //         error: 'name must be unique!'
-    //     })
-    // }
 
 
     const person = new Person({
