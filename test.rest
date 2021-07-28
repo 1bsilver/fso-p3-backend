@@ -13,3 +13,12 @@ content-type: application/json
     "name": "samplwe",
     "number": "123-456-789"
 }
+
+
+POST https://localhost:3001/api/persons/ 
+content-type: application/json
+
+{
+    "name": "samplwe",
+    "number": "123456789"
+}
