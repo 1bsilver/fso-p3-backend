@@ -8,6 +8,10 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": ">=16.6.1",
+    "npm": ">=7.20.5"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/1bsilver/fso-part3.git"
